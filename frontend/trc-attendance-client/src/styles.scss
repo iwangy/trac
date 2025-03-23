@@ -1,0 +1,673 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'bootstrap/scss/bootstrap' as bootstrap;
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css");
+
+/* Custom Variables */
+:root {
+  --bs-primary: #0d6efd;
+  --bs-secondary: #6c757d;
+  --bs-success: #198754;
+  --bs-info: #0dcaf0;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+  --bs-light: #f8f9fa;
+  --bs-dark: #212529;
+  --bs-body-bg: #f8f9fa;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --hover-bg: #f8f9fa;
+  --card-border-width: 2px;
+  --card-hover-transform: translateY(-2px);
+  --light-card-bg: #ffffff;
+  --light-card-border: #d1d9e6;
+  --light-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Global styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--bs-body-font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  min-height: 100vh;
+  
+  &.dark-mode {
+    background-color: var(--bg-primary);
+    
+    app-root {
+      background-color: var(--bg-primary);
+    }
+  }
+}
+
+/* Modal styles */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+.modal {
+  z-index: 1050 !important;
+}
+
+.modal-dialog {
+  z-index: 1051 !important;
+  position: relative;
+}
+
+.modal-content {
+  position: relative;
+  z-index: 1052 !important;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--bs-border-radius-lg);
+  box-shadow: var(--bs-box-shadow-lg);
+}
+
+/* Common utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Custom styles */
+.nav-link.active {
+  color: var(--bs-primary) !important;
+  font-weight: 500;
+}
+
+.btn {
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+  }
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem;
+  line-height: 1;
+  border-radius: 0.375rem;
+}
+
+/* Card styles */
+.card {
+  border: none;
+  border-radius: var(--bs-border-radius-lg);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--bs-box-shadow-lg) !important;
+  }
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Form styles */
+.form-control,
+.form-select {
+  &:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+  }
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Animation classes */
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Layout utilities */
+.main-content {
+  min-height: calc(100vh - 120px); /* Adjust based on your header/footer height */
+  padding: 2rem 0;
+}
+
+/* Form validation styles */
+.form-control.is-invalid {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Additional utility classes */
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+}
+
+// Responsive breakpoints
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+.dark-mode {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #e9ecef;
+  --text-secondary: #adb5bd;
+  --border-color: #404040;
+  --card-bg: #2d2d2d;
+  --input-bg: #333333;
+  --input-border: #404040;
+  --hover-bg: #3d3d3d;
+  --card-border-width: 2px;
+  --card-hover-transform: translateY(-2px);
+  --dark-card-bg: #3a3a3a;
+  --dark-card-border: #4a4a4a;
+  --dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+
+  app-root, .d-flex.flex-column.min-vh-100 {
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+  }
+
+  // Enhanced Modal styles
+  .modal-content {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+
+    .card {
+      background-color: var(--bs-primary) !important;
+      border-color: var(--bs-primary) !important;
+      color: #ffffff !important;
+
+      &:hover {
+        background-color: var(--bs-primary) !important;
+        transform: translateY(-2px);
+      }
+
+      .card-title, .card-text, h6, p, small {
+        color: #ffffff !important;
+      }
+
+      .text-muted {
+        color: rgba(255, 255, 255, 0.8) !important;
+      }
+    }
+  }
+
+  .modal-header {
+    border-bottom-color: var(--border-color);
+    color: var(--text-primary);
+    background-color: var(--card-bg);
+
+    .btn-close {
+      filter: invert(1) grayscale(100%) brightness(200%);
+    }
+  }
+
+  .modal-body {
+    color: var(--text-primary);
+    background-color: var(--card-bg);
+
+    .list-group-item {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+
+      &:hover {
+        background-color: var(--hover-bg);
+        color: var(--text-primary);
+      }
+
+      &.active {
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+        color: #ffffff;
+      }
+    }
+  }
+
+  .modal-footer {
+    border-top-color: var(--border-color);
+    background-color: var(--card-bg);
+  }
+
+  // Meeting time cards in modal
+  .meeting-time-card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+
+    &:hover {
+      background-color: var(--hover-bg);
+      color: var(--text-primary);
+    }
+  }
+
+  // Rest of dark mode styles...
+  .card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .table {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+
+    thead th {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    tbody {
+      td {
+        background-color: var(--card-bg);
+        border-color: var(--border-color);
+        color: var(--text-primary);
+      }
+
+      tr:hover td {
+        background-color: var(--hover-bg);
+      }
+
+      .text-muted, small {
+        color: var(--text-secondary) !important;
+      }
+    }
+
+    .bi {
+      color: var(--text-primary);
+    }
+  }
+
+  .form-control, .form-select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+
+    &:focus {
+      background-color: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+
+  .input-group-text {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+  }
+
+  .list-group-item {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+
+    &:hover {
+      background-color: var(--hover-bg);
+    }
+
+    .text-muted, small {
+      color: var(--text-secondary) !important;
+    }
+
+    h6.mb-1 {
+      color: var(--text-primary);
+    }
+
+    .badge {
+      color: #ffffff;
+    }
+  }
+
+  // Recent Sessions cards specific styles
+  .recent-sessions {
+    .list-group-item {
+      transition: all 0.2s ease-in-out;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: var(--hover-bg);
+      }
+    }
+  }
+
+  // Search results and helper text
+  .search-helper-text,
+  .search-results-text {
+    color: var(--text-primary);
+  }
+
+  .search-container {
+    .form-text,
+    .text-muted {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  // Scrollbar styles
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--text-secondary);
+    }
+  }
+
+  // Bootstrap card variants
+  .card.bg-primary {
+    background-color: #0d6efd !important;
+  }
+
+  .card.bg-success {
+    background-color: #198754 !important;
+  }
+
+  .card.bg-info {
+    background-color: #0dcaf0 !important;
+  }
+
+  .card.bg-warning {
+    background-color: #ffc107 !important;
+  }
+
+  // Footer specific styles
+  .footer {
+    background-color: var(--card-bg);
+    border-top-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .category-card,
+  .meeting-category {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-card-border) !important;
+    box-shadow: var(--dark-card-shadow) !important;
+    color: var(--text-primary) !important;
+
+    &:hover {
+      transform: var(--card-hover-transform) !important;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4) !important;
+      border-color: var(--bs-primary) !important;
+    }
+
+    &.selected,
+    &.active {
+      background-color: var(--bs-primary) !important;
+      border-color: var(--bs-primary) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3) !important;
+    }
+
+    .card-title,
+    .card-text {
+      color: inherit !important;
+    }
+  }
+
+  // Ensure text-muted is visible in dark mode
+  .text-muted {
+    color: var(--text-secondary) !important;
+  }
+
+  // Make icons visible in dark mode
+  .bi {
+    color: inherit;
+  }
+
+  // Update list-group-item styles for all contexts
+  .list-group {
+    .list-group-item {
+      background-color: var(--card-bg);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--hover-bg);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .text-muted, small {
+        color: var(--text-secondary) !important;
+      }
+
+      h6, p, span {
+        color: var(--text-primary);
+      }
+    }
+  }
+
+  // Ensure search helper text is visible
+  .form-text,
+  .search-helper,
+  .helper-text,
+  small {
+    color: var(--text-secondary) !important;
+  }
+
+  // Update input group styles
+  .input-group {
+    .input-group-text {
+      background-color: var(--input-bg);
+      border-color: var(--input-border);
+      color: var(--text-primary);
+    }
+
+    .form-control {
+      border-color: var(--input-border);
+      
+      &:not(:first-child) {
+        border-left: 0;
+      }
+      
+      &:not(:last-child) {
+        border-right: 0;
+      }
+    }
+  }
+
+  // Update form text and helper styles
+  .form-text,
+  .input-group-text,
+  .helper-text {
+    color: var(--text-primary);
+  }
+}
+
+// Light mode list-group-item styles (outside dark-mode)
+.list-group {
+  .list-group-item {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* Card styles */
+.category-card,
+.meeting-category {
+  border-width: var(--card-border-width) !important;
+  border-style: solid !important;
+  border-radius: 8px !important;
+  padding: 1rem !important;
+  margin-bottom: 1rem !important;
+  transition: all 0.2s ease-in-out !important;
+
+  // Light mode styles
+  background-color: var(--light-card-bg) !important;
+  border-color: var(--light-card-border) !important;
+  box-shadow: var(--light-card-shadow) !important;
+  color: var(--text-primary) !important;
+
+  &:hover {
+    transform: var(--card-hover-transform) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: var(--bs-primary) !important;
+  }
+
+  &.selected,
+  &.active {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3) !important;
+  }
+}
+
+// Add to light mode (outside dark-mode block)
+.recent-sessions {
+  .list-group-item {
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: var(--hover-bg);
+    }
+  }
+}
+
+// Light mode input group styles (outside dark-mode)
+.input-group {
+  .input-group-text {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+  }
+
+  .form-control {
+    &:not(:first-child) {
+      border-left: 0;
+    }
+    
+    &:not(:last-child) {
+      border-right: 0;
+    }
+  }
+}

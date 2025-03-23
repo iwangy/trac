@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+
+  .card-body {
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+.table {
+  th {
+    font-weight: 600;
+    color: var(--bs-gray-700);
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}
+
+.list-group-item {
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--bs-gray-100);
+  }
+}
+
+.modal-dialog {
+  max-width: 800px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+  }
+}

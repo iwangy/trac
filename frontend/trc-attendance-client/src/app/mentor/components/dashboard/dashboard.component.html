@@ -1,0 +1,321 @@
+<!-- Main Container -->
+<div class="container py-4">
+  <!-- Stats Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-primary text-white h-100">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-people me-2"></i>
+            Total Students
+          </h6>
+          <h2 class="card-text mb-0">{{stats?.totalStudents || 0}}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-success text-white h-100">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-person-check me-2"></i>
+            Active Students
+          </h6>
+          <h2 class="card-text mb-0">{{stats?.activeStudents || 0}}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-info text-white h-100">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-clock-history me-2"></i>
+            Total Hours
+          </h6>
+          <h2 class="card-text mb-0">
+            {{formatDuration(stats?.totalHours || 0)}}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-warning text-white h-100">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-calendar-check me-2"></i>
+            Active Sessions
+          </h6>
+          <h2 class="card-text mb-0">{{activeSessions || 0}}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Meetings Management -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-calendar-event me-2"></i>
+          Active Meetings
+        </h5>
+        <button class="btn btn-primary btn-sm" (click)="openNewMeetingModal(newMeetingModal)">
+          <i class="bi bi-plus-circle me-2"></i>
+          Create Meeting
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Meeting Type</th>
+              <th>Location</th>
+              <th>Started</th>
+              <th>Students Present</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let meeting of activeMeetings">
+              <td>{{meeting.meetingType}}</td>
+              <td>{{meeting.location}}</td>
+              <td>{{meeting.startTime | date:'shortTime'}}</td>
+              <td>{{meeting.studentsPresent.length || 0}} students</td>
+              <td>
+                <button class="btn btn-sm btn-danger" (click)="endMeeting(meeting._id)">
+                  <i class="bi bi-x-circle me-1"></i>
+                  End Meeting
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!activeMeetings?.length">
+              <td colspan="5" class="text-center py-4">
+                <i class="bi bi-calendar-x text-muted fs-1 d-block mb-2"></i>
+                No active meetings
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">
+        <i class="bi bi-funnel me-2"></i>
+        Filters
+      </h5>
+      <form [formGroup]="filterForm" (ngSubmit)="applyFilters()">
+     <div class="row g-3">
+  <!-- Date Range -->
+  <div class="col-md-3">
+    <label class="form-label fw-bold">Date Range</label>
+    <select class="form-select form-select-sm" formControlName="dateRange">
+      <option value="today">Today</option>
+      <option value="week">This Week</option>
+      <option value="month">This Month</option>
+      <option value="custom">Custom Range</option>
+    </select>
+  </div>
+
+  <!-- Start Date -->
+  <div class="col-md-3" *ngIf="filterForm.get('dateRange')?.value === 'custom'">
+    <label class="form-label fw-bold">Start Date</label>
+    <input type="date" class="form-control form-control-sm" formControlName="startDate">
+  </div>
+
+  <!-- End Date -->
+  <div class="col-md-3" *ngIf="filterForm.get('dateRange')?.value === 'custom'">
+    <label class="form-label fw-bold">End Date</label>
+    <input type="date" class="form-control form-control-sm" formControlName="endDate">
+  </div>
+
+  <!-- Meeting Type -->
+  <div class="col-md-3">
+    <label class="form-label fw-bold">Meeting Type</label>
+    <select class="form-select form-select-sm" formControlName="meetingType">
+      <option value="">All Types</option>
+      <option *ngFor="let type of meetingTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+
+  <!-- Sort By -->
+  <div class="col-md-3">
+    <label class="form-label fw-bold">Sort By</label>
+    <select class="form-select form-select-sm" formControlName="sortBy">
+      <option value="name">Name</option>
+      <option value="hours">Total Hours</option>
+      <option value="recent">Recent Activity</option>
+    </select>
+  </div>
+
+  <!-- Show All Students (Checkbox) -->
+  <div class="col-md-3 d-flex align-items-center mt-4">
+    <input type="checkbox" class="form-check-input me-2" formControlName="showAllStudents">
+    <label class="form-check-label fw-bold">Show All Students</label>
+  </div>
+
+  <!-- Buttons -->
+  <div class="col-12 d-flex justify-content-start mt-2">
+    <button type="submit" class="btn btn-primary btn-sm">
+      <i class="bi bi-search me-2"></i> Apply Filters
+    </button>
+    <button type="button" class="btn btn-outline-secondary btn-sm ms-2" (click)="resetFilters()">
+      <i class="bi bi-x-circle me-2"></i> Reset
+    </button>
+  </div>
+</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Students Table -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-person-lines-fill me-2"></i>
+          Student Attendance & Roster
+        </h5>
+        <button class="btn btn-outline-primary btn-sm" (click)="exportToExcel()">
+          <i class="bi bi-file-earmark-excel me-2"></i>
+          Export to Excel
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Student ID</th>
+              <th>Total Hours</th>
+              <th>Recent Activity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of students">
+              <td>{{student.name}}</td>
+              <td>{{student.userId}}</td>
+              <td>{{formatDuration(student.totalHours)}}</td>
+              <td>
+                <small class="text-muted">
+                  Last active: {{student.lastActive | date:'medium'}}
+                </small>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="viewDetails(student, detailsModal)">
+                  <i class="bi bi-eye me-1"></i>
+                  Details
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!students?.length">
+              <td colspan="5" class="text-center py-4">
+                <i class="bi bi-inbox text-muted fs-1 d-block mb-2"></i>
+                No students found matching the filters
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Meeting Modal -->
+<ng-template #newMeetingModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="bi bi-calendar-plus me-2"></i>
+      Create New Meeting
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="meetingForm" (ngSubmit)="createMeeting()">
+      <div class="mb-3">
+        <label class="form-label">Meeting Type</label>
+        <select class="form-select" formControlName="meetingType">
+          <option value="">Select Type</option>
+          <option *ngFor="let type of meetingTypes" [value]="type">{{type}}</option>
+        </select>
+      </div>
+      <div class="mb-3" *ngIf="meetingForm.get('meetingType')?.value === 'Custom'">
+        <label class="form-label">Custom Meeting Type</label>
+        <input type="text" class="form-control" formControlName="customMeetingType">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-control" formControlName="location">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Notes (Optional)</label>
+        <textarea class="form-control" formControlName="notes" rows="3"></textarea>
+      </div>
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!meetingForm.valid">
+          Create Meeting
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Student Details Modal Template -->
+<ng-template #detailsModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="bi bi-person me-2"></i>
+      {{selectedStudent?.name}} - Attendance Details
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <!-- Student Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6 col-md-4" *ngFor="let stat of selectedStudent?.meetingTypeBreakdown | keyvalue">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-title text-muted">{{stat.key}}</h6>
+            <h3 class="card-text mb-0">
+              {{formatDuration(stat.value)}}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance History -->
+    <h6 class="mb-3">Attendance History</h6>
+    <div class="list-group">
+      <div class="list-group-item" *ngFor="let session of selectedStudent?.sessions">
+        <div class="d-flex w-100 justify-content-between">
+          <h6 class="mb-1">
+            <i class="bi bi-tag me-2"></i>
+            {{session.meetingType}}
+            <span class="badge bg-secondary ms-2">{{session.location}}</span>
+          </h6>
+          <small class="text-muted">{{formatDuration(session.duration / 60)}}</small>
+        </div>
+        <p class="mb-1">
+          <small class="text-muted">
+            <i class="bi bi-calendar-event me-1"></i>
+            {{session.checkIn | date:'medium'}} - {{session.checkOut | date:'shortTime'}}
+          </small>
+        </p>
+        <p class="mb-0" *ngIf="session.notes">
+          <small class="text-muted">
+            <i class="bi bi-journal-text me-1"></i>
+            {{session.notes}}
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>

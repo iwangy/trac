@@ -1,0 +1,160 @@
+.header {
+  background-color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  a {
+    color: #1976d2;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      color: #1565c0;
+    }
+  }
+}
+
+.nav-menu {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  a {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 24px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #1976d2;
+      background-color: rgba(25, 118, 210, 0.05);
+    }
+
+    &.active {
+      color: #1976d2;
+      background-color: rgba(25, 118, 210, 0.1);
+    }
+  }
+
+  .logout-btn {
+    color: #f44336;
+    
+    &:hover {
+      color: #d32f2f;
+      background-color: rgba(244, 67, 54, 0.05);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .nav-menu {
+    gap: 0.5rem;
+
+    a {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.navbar {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+
+  .navbar-brand {
+    color: var(--text-primary);
+    font-weight: 500;
+    
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  .nav-link {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+
+    &.active {
+      color: var(--text-primary);
+    }
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 2rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: var(--text-primary);
+      background-color: var(--hover-bg);
+      transform: translateY(-1px);
+    }
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+
+  .navbar-toggler {
+    border-color: var(--border-color);
+    
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .navbar-toggler-icon {
+    background-image: none;
+    position: relative;
+    
+    &::before {
+      content: '\F479';
+      font-family: 'bootstrap-icons';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text-primary);
+    }
+  }
+}
+
+// Dark mode specific styles
+:host-context(.dark-mode) {
+  .theme-toggle {
+    i {
+      color: #ffd700;
+    }
+  }
+}

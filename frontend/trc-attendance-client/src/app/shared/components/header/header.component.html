@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <i class="bi bi-calendar-check me-2"></i>
+      TRC Attendance
+    </a>
+
+    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" [ngbCollapse]="isMenuCollapsed">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <!-- Theme Toggle -->
+        <li class="nav-item">
+          <button class="btn theme-toggle" (click)="toggleDarkMode()">
+            <i class="bi" [class.bi-moon-stars-fill]="isDarkMode$ | async" [class.bi-sun-fill]="!(isDarkMode$ | async)"></i>
+            <span class="ms-2 d-none d-sm-inline">{{ (isDarkMode$ | async) ? 'Dark' : 'Light' }} Mode</span>
+          </button>
+        </li>
+
+        <!-- Mentor/Admin Dashboard Link (only for authenticated mentors & admins) -->
+        <ng-container *ngIf="authService.isAuthenticated() && (authService.isMentor() || authService.isAdmin())">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/mentor/dashboard">
+              <i class="bi bi-speedometer2 me-1"></i>
+              Dashboard
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Admin Links (only for authenticated admins) -->
+        <ng-container *ngIf="authService.isAuthenticated() && authService.isAdmin()">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">
+              <i class="bi bi-people me-1"></i>
+              Users
+            </a>
+          </li>
+      
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/meeting-types" routerLinkActive="active">
+              <i class="bi bi-calendar-event me-1"></i>
+              Meeting Types
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Auth Links -->
+        <ng-container *ngIf="(authService.isAuthenticated$ | async) === false">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/auth/login">
+              <i class="bi bi-box-arrow-in-right me-1"></i>
+              Mentor Login
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Authenticated Links -->
+        <ng-container *ngIf="authService.isAuthenticated$ | async">
+          <li class="nav-item">
+            <span class="nav-link text-primary">
+              <i class="bi bi-person-circle me-1"></i>
+              {{ authService.currentUserValue?.name }}
+              <small class="text-muted ms-1">({{ authService.currentUserValue?.role }})</small>
+            </span>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-link nav-link" (click)="logout()">
+              <i class="bi bi-box-arrow-right me-1"></i>
+              Logout
+            </button>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,208 @@
+<!-- Main Container -->
+<div class="container py-4">
+  <!-- Student Selection -->
+  <div class="card mb-4" *ngIf="!selectedStudent">
+    <div class="card-body">
+      <h5 class="card-title mb-3">
+        <i class="bi bi-person-circle me-2"></i>
+        Select Your Name
+      </h5>
+      <div class="search-container">
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="searchTerm"
+          name="searchTerm"
+          (input)="onSearchChange($event)"
+          (keydown)="onKeyDown($event)"
+          placeholder="Type your name..."
+          aria-label="Search students">
+        
+        <div class="search-results" *ngIf="filteredStudents.length > 0">
+          <div class="list-group">
+            <a 
+              *ngFor="let student of filteredStudents; let i = index"
+              href="javascript:void(0)"
+              class="list-group-item list-group-item-action"
+              [class.active]="i === selectedIndex"
+              (click)="onStudentSelect(student)"
+              (mouseenter)="selectedIndex = i">
+              {{ student.name }}
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-text mt-2">
+        <i class="bi bi-info-circle me-1"></i>
+        Start typing your name to search
+      </div>
+
+      <!-- Quick Registration Form -->
+      <div class="mt-4" *ngIf="quickRegisterVisible && searchTerm && !filteredStudents.length">
+        <div class="alert alert-info">
+          <i class="bi bi-person-plus me-2"></i>
+          Looks like you're new! Please fill in your details to register:
+        </div>
+        <form [formGroup]="quickRegisterForm" (ngSubmit)="onQuickRegister()">
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              [ngModel]="searchTerm"
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control"
+                formControlName="password"
+                placeholder="Create a password"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePasswordVisibility()"
+              >
+                <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!quickRegisterForm.valid || isRegistering">
+            <span class="spinner-border spinner-border-sm me-2" *ngIf="isRegistering"></span>
+            Register & Continue
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Stats and Check-in Form -->
+  <div *ngIf="selectedStudent">
+    <!-- Student Info Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4>
+        <i class="bi bi-person-circle me-2"></i>
+        Welcome, {{selectedStudent.name}}!
+      </h4>
+      <button class="btn btn-outline-secondary" (click)="clearStudent()">
+        <i class="bi bi-arrow-left me-2"></i>
+        Change Student
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6 col-md-4">
+        <div class="card bg-primary text-white">
+          <div class="card-body">
+            <h6 class="card-title">Total Hours</h6>
+            <h2 class="card-text mb-0">{{formatDuration(stats?.totalHours || 0)}}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4" *ngFor="let stat of stats?.meetingTypeBreakdown | keyvalue">
+        <div class="card bg-info text-white">
+          <div class="card-body">
+            <h6 class="card-title">{{stat.key}} Hours</h6>
+            <h2 class="card-text mb-0">{{formatDuration(stat.value)}}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Check-in Form -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">
+          <i class="bi bi-calendar-check me-2"></i>
+          Check In
+        </h5>
+        <form [formGroup]="checkInForm" (ngSubmit)="checkIn()">
+          <div class="mb-3">
+            <label class="form-label">Select Meeting</label>
+            <select class="form-select" formControlName="meetingId">
+              <option value="">Choose a meeting...</option>
+              <option *ngFor="let meeting of activeMeetings" [value]="meeting._id">
+                {{meeting.meetingType}} - {{meeting.location}}
+              </option>
+            </select>
+            <div class="form-text" *ngIf="!activeMeetings?.length">
+              No active meetings available. Please wait for a mentor to start a meeting.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Notes (Optional)</label>
+            <textarea class="form-control" formControlName="notes" rows="2"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!checkInForm.valid || currentSession">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Sign in
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Current Session -->
+    <div class="card mb-4" *ngIf="currentSession">
+      <div class="card-body">
+        <h5 class="card-title mb-3">
+          <i class="bi bi-clock-history me-2"></i>
+          Current Session
+        </h5>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1">{{currentSession.meetingType}}</h6>
+            <p class="text-muted mb-0">
+              Started: {{currentSession.checkIn | date:'medium'}}
+            </p>
+          </div>
+          <button class="btn btn-danger" (click)="checkOut()">
+            <i class="bi bi-box-arrow-right me-2"></i>
+            Sign out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Sessions -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title mb-3">
+          <i class="bi bi-clock-history me-2"></i>
+          Recent Sessions
+        </h5>
+        <div class="list-group">
+          <div class="list-group-item" *ngFor="let session of stats?.recentSessions">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">{{session.meetingType}}</h6>
+              <small>{{formatDuration(session.duration / 60)}}</small>
+            </div>
+            <p class="mb-1">
+              <small class="text-muted">
+                {{session.checkIn | date:'medium'}} - {{session.checkOut | date:'shortTime'}}
+              </small>
+            </p>
+            <p class="mb-0" *ngIf="session.notes">
+              <small class="text-muted">{{session.notes}}</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

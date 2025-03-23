@@ -1,0 +1,167 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow">
+      <div class="card-header bg-success text-white text-center py-3">
+        <h4 class="mb-0">
+          <i class="bi bi-person-plus me-2"></i>
+          Register
+        </h4>
+      </div>
+      <div class="card-body p-4">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                class="form-control"
+                [class.is-invalid]="name?.invalid && (name?.dirty || name?.touched)"
+                placeholder="Enter your full name"
+              />
+            </div>
+            <div class="invalid-feedback" *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+              <div *ngIf="name?.errors?.['required']">Full name is required</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-control"
+                [class.is-invalid]="email?.invalid && (email?.dirty || email?.touched)"
+                placeholder="Enter your email"
+              />
+            </div>
+            <div class="invalid-feedback" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+              <div *ngIf="email?.errors?.['required']">Email is required</div>
+              <div *ngIf="email?.errors?.['email']">Please enter a valid email</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-key"></i>
+              </span>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                class="form-control"
+                [class.is-invalid]="password?.invalid && (password?.dirty || password?.touched)"
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePasswordVisibility()"
+              >
+                <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+              </button>
+            </div>
+            <div class="invalid-feedback" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+              <div *ngIf="password?.errors?.['required']">Password is required</div>
+              <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="role" class="form-label">Role</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-person-badge"></i>
+              </span>
+              <select
+                id="role"
+                formControlName="role"
+                class="form-select"
+                [class.is-invalid]="role?.invalid && (role?.dirty || role?.touched)"
+              >
+                <option value="">Select a role</option>
+                <option value="student">Student</option>
+                <option value="mentor">Mentor</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="invalid-feedback" *ngIf="role?.invalid && (role?.dirty || role?.touched)">
+              <div *ngIf="role?.errors?.['required']">Role is required</div>
+            </div>
+          </div>
+
+          <div class="mb-4" *ngIf="role?.value === 'mentor'">
+            <label for="mentorCode" class="form-label">Mentor Code</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-key-fill"></i>
+              </span>
+              <input
+                type="password"
+                id="mentorCode"
+                formControlName="mentorCode"
+                class="form-control"
+                [class.is-invalid]="mentorCode?.invalid && (mentorCode?.dirty || mentorCode?.touched)"
+                placeholder="Enter mentor code"
+              />
+            </div>
+            <div class="invalid-feedback" *ngIf="mentorCode?.invalid && (mentorCode?.dirty || mentorCode?.touched)">
+              <div *ngIf="mentorCode?.errors?.['required']">Mentor code is required</div>
+              <div *ngIf="mentorCode?.errors?.['invalidCode']">Invalid mentor code</div>
+            </div>
+          </div>
+
+          <div class="mb-4" *ngIf="role?.value === 'admin'">
+            <label for="adminCode" class="form-label">Admin Code</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-key-fill"></i>
+              </span>
+              <input
+                type="password"
+                id="adminCode"
+                formControlName="adminCode"
+                class="form-control"
+                [class.is-invalid]="adminCode?.invalid && (adminCode?.dirty || adminCode?.touched)"
+                placeholder="Enter admin code"
+              />
+            </div>
+            <div class="invalid-feedback" *ngIf="adminCode?.invalid && (adminCode?.dirty || adminCode?.touched)">
+              <div *ngIf="adminCode?.errors?.['required']">Admin code is required</div>
+              <div *ngIf="adminCode?.errors?.['invalidCode']">Invalid admin code</div>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="registerForm.invalid || isLoading"
+            >
+              <span class="spinner-border spinner-border-sm me-2" *ngIf="isLoading"></span>
+              Register
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center mt-4">
+          <p class="mb-0">
+            Already have an account?
+            <a routerLink="/auth/login" class="text-primary text-decoration-none">Login here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
